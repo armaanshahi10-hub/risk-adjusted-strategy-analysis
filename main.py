@@ -7,27 +7,23 @@ from src.plots import plot_equity_and_drawdown, plot_trades_with_indicators
 
 PARAMS = {
     "ticker": "SPY",
-    "start_date": "2010-01-01", 
+    "start_date": "2010-01-01",
     "end_date": "2018-12-31",
-
     "supertrend_len": 14,
     "supertrend_mult": 3,
     "atr_len": 14,
     "ema_span": 20,
-
     "wait_bars": 2,
     "atr_mult": 2.5,
-
-    # NEW: 15% trailing stop from highest close since entry
     "trail_stop_pct": 0.15,
-
     "recent_n": 10,
     "vol_ma_n": 20,
     "vol_mult": 1.10,
-
     "initial_capital": 10000,
     "core_weight": 0.30,
     "sat_weight": 0.70,
+    "commission_pct": 0.0005,
+    "slippage_pct": 0.0005,
 }
 
 def main():
