@@ -89,6 +89,4 @@ main.py          → pipeline runner
 
 ## Next Improvements
 
-- Transaction cost modeling  
-- Out-of-sample testing  
 - Parameter sensitivity analysis  
