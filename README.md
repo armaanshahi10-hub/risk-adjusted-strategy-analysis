@@ -54,34 +54,36 @@ A momentum filter (EMA20) is used to avoid exiting on small fluctuations.
 
 # Project Structure
 
+```text
 risk-adjusted-strategy-analysis/
-├── main.py # Single run
-├── train_test.py # Train/test evaluation
-├── multi_asset_test.py # Runs across multiple assets
+├── main.py                # Single run
+├── train_test.py          # Train/test evaluation
+├── multi_asset_test.py    # Runs across multiple assets
 ├── src/
-│ ├── data.py
-│ ├── indicators.py
-│ ├── signals.py
-│ ├── backtest.py
-│ ├── metrics.py
-│ └── plots.py
+│   ├── data.py
+│   ├── indicators.py
+│   ├── signals.py
+│   ├── backtest.py
+│   ├── metrics.py
+│   └── plots.py
 └── outputs/
-
----
+```
 
 # How to Run
 
 Install dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
 Run:
 
+```bash
 python main.py
 python train_test.py
 python multi_asset_test.py
-
----
+```
 
 # Results (SPY)
 
