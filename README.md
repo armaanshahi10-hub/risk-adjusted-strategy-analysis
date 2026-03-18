@@ -64,6 +64,17 @@ risk-adjusted-strategy-analysis/
 
 ---
 
+## How to Run
+
+Install dependencies:
+
+bash
+pip install -r requirements.txt
+python train_test.py
+python multi_asset_test.py
+
+---
+
 ## Headline Results (SPY)
 
 ### Train Period: 2010-01-01 to 2018-12-31
