@@ -33,6 +33,10 @@ def summarize_performance(bt: pd.DataFrame) -> dict:
     exits = int((bt2["SatChange"] == -1).sum())
     time_in = float(bt2["SatIn_BT"].mean())
 
+    total_trade_costs = 0.0
+    if "CumTradeCost_$" in bt2.columns:
+        total_trade_costs = float(bt2["CumTradeCost_$"].iloc[-1])
+
     return {
         "FinalValue_Strategy": float(bt2["PortfolioValue"].iloc[-1]),
         "FinalValue_BH": float(bt2["BH_Portfolio"].iloc[-1]),
@@ -47,4 +51,6 @@ def summarize_performance(bt: pd.DataFrame) -> dict:
         "Sat_Entries": entries,
         "Sat_Exits": exits,
         "Sat_TimeInMarket": time_in,
+        "TotalTradeCosts_$": total_trade_costs,
+        "TotalTradeCosts_PctInitial": total_trade_costs / float(bt2["PortfolioValue"].iloc[0]),
     }
