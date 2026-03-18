@@ -14,7 +14,7 @@ def plot_equity_and_drawdown(bt: pd.DataFrame, outdir: str = "outputs", title_su
     plt.legend()
     plt.tight_layout()
     plt.savefig(Path(outdir) / "equity_curve.png", dpi=200)
-    plt.show()
+    plt.close()
 
     # Drawdown
     strat_dd = bt["PortfolioValue"] / bt["PortfolioValue"].cummax() - 1
@@ -27,7 +27,7 @@ def plot_equity_and_drawdown(bt: pd.DataFrame, outdir: str = "outputs", title_su
     plt.legend()
     plt.tight_layout()
     plt.savefig(Path(outdir) / "drawdown.png", dpi=200)
-    plt.show()
+    plt.close()
 
 
 def plot_trades_with_indicators(bt: pd.DataFrame, outdir: str = "outputs", lookback_bars: int = 300) -> None:
@@ -53,4 +53,4 @@ def plot_trades_with_indicators(bt: pd.DataFrame, outdir: str = "outputs", lookb
     plt.legend()
     plt.tight_layout()
     plt.savefig(Path(outdir) / "trades_indicators.png", dpi=200)
-    plt.show()
+    plt.close()

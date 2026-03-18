@@ -1,64 +1,58 @@
-# Risk-Adjusted Strategy Analysis (Python)
+# Risk-Adjusted Strategy Analysis
 
-This project builds a Python framework to test a rule-based investment strategy using historical market data.
+A Python backtesting project that evaluates a rule-based, risk-managed trading strategy against buy-and-hold.
 
-The goal is to compare a **risk-managed strategy** against a simple buy-and-hold approach and understand the trade-off between **return and risk (drawdowns)**.
+The strategy uses a **core-satellite portfolio structure**:
 
----
+- **Core (30%)** stays invested at all times  
+- **Satellite (70%)** enters and exits based on technical signals  
 
-# Strategy Idea
+The objective is to study the trade-off between:
 
-The portfolio is split into two parts:
-
-- **Core (30%)**: Always invested in the market  
-- **Satellite (70%)**: Actively enters and exits based on signals  
-
-This means the portfolio is always between:
-
-- 30% invested (defensive)
-- 100% invested (bullish conditions)
+- return  
+- drawdown  
+- volatility  
+- risk-adjusted performance  
 
 ---
 
-# Entry Conditions
+## Strategy Overview
 
-The strategy enters when:
+The satellite portion enters when bullish conditions are confirmed by:
 
-- Trend turns bullish (Supertrend indicator)
-- Price breaks above a recent high
-- Volume is above average
+- Supertrend  
+- breakout above a recent high  
+- volume confirmation  
 
----
+The satellite exits when conditions weaken through:
 
-# Exit Conditions
+- bearish trend change  
+- trailing stop logic  
+- momentum filter logic  
 
-The strategy exits when:
-
-- Trend turns bearish, OR
-- Price hits a trailing stop
-
-A momentum filter (EMA20) is used to avoid exiting on small fluctuations.
+This creates a portfolio that is always partially invested while actively reducing exposure during weaker market conditions.
 
 ---
 
-# Backtest Assumptions
+## Backtest Assumptions
 
-- Initial capital: $10,000  
-- Execution: Next-day open  
-- Portfolio valued at daily close  
-- Transaction costs:
-  - Commission: 0.05%
-  - Slippage: 0.05%
+- Initial capital: **$10,000**  
+- Execution: **next-day open**  
+- Portfolio valuation: **daily close**  
+- Core allocation: **30%**  
+- Satellite allocation: **70%**  
+- Commission: **0.05%**  
+- Slippage: **0.05%**  
 
 ---
 
-# Project Structure
+## Project Structure
 
-```text
 risk-adjusted-strategy-analysis/
-├── main.py                # Single run
-├── train_test.py          # Train/test evaluation
-├── multi_asset_test.py    # Runs across multiple assets
+├── train_test.py
+├── multi_asset_test.py
+├── requirements.txt
+├── README.md
 ├── src/
 │   ├── data.py
 │   ├── indicators.py
@@ -67,75 +61,77 @@ risk-adjusted-strategy-analysis/
 │   ├── metrics.py
 │   └── plots.py
 └── outputs/
-```
 
-# How to Run
+---
 
-Install dependencies:
+## Headline Results (SPY)
 
-```bash
-pip install -r requirements.txt
-```
+### Train Period: 2010-01-01 to 2018-12-31
 
-Run:
-
-```bash
-python main.py
-python train_test.py
-python multi_asset_test.py
-```
-
-# Results (SPY)
-
-### Train (2010–2018)
-
-| Metric | Strategy | Buy & Hold |
-|-------|---------|------------|
-| CAGR | 6.49% | 11.32% |
+| Metric | Strategy | Buy and Hold |
+|---|---:|---:|
+| CAGR | 6.45% | 11.32% |
 | Sharpe | 0.69 | 0.79 |
-| Max Drawdown | **-12.37%** | -19.35% |
+| Max Drawdown | -12.37% | -19.35% |
 
----
+### Test Period: 2019-01-01 to 2024-12-31
 
-### Test (2019–2024)
-
-| Metric | Strategy | Buy & Hold |
-|-------|---------|------------|
+| Metric | Strategy | Buy and Hold |
+|---|---:|---:|
 | CAGR | 12.30% | 17.18% |
-| Sharpe | **1.02** | 0.90 |
-| Max Drawdown | **-14.67%** | -33.72% |  
+| Sharpe | 1.02 | 0.90 |
+| Max Drawdown | -14.67% | -33.72% |
 
 ---
 
-# Visualizations
+## Multi-Asset Test
 
-### Equity Curve
-![Equity Curve](outputs/equity_curve.png)
+The framework was also tested across:
 
-### Drawdown
-![Drawdown](outputs/drawdown.png)
+- SPY  
+- QQQ  
+- IWM  
+- EFA  
+- TLT  
+- GLD  
 
-# Key Takeaway
+This was included to evaluate how the strategy behaves across different asset classes and market environments.
 
-The strategy:
+Overall, the strategy generally:
 
-- Reduces drawdowns significantly  
-- Improves risk-adjusted returns (Sharpe)  
-- Trades less (~60% time in market)  
-- Underperforms buy-and-hold in total return  
-
----
-
-# What This Project Shows
-
-- Data cleaning and processing  
-- Building a modular Python pipeline  
-- Designing rule-based systems  
-- Evaluating performance using metrics like CAGR, Sharpe, and drawdown  
+- lowers drawdowns  
+- reduces market exposure  
+- sometimes improves Sharpe  
+- usually trails buy-and-hold in absolute return during strong bull markets  
 
 ---
 
-# Notes
+## Key Takeaways
 
-This is not meant to be a production trading system.  
-It is a project to explore how different rules affect risk and return.
+- The strategy is **risk-managed**, not return-maximizing  
+- It gives up some upside in strong markets  
+- It provides materially better downside control  
+- In the SPY test period, it achieved a **higher Sharpe ratio** and **much lower drawdown** than buy-and-hold  
+
+---
+
+## What This Project Demonstrates
+
+- modular Python project structure  
+- historical data cleaning and preprocessing  
+- technical indicator construction  
+- rule-based signal generation  
+- portfolio backtesting  
+- performance evaluation using CAGR, Sharpe ratio, volatility, and max drawdown  
+
+---
+
+## Notes
+
+This is a research and portfolio project, not a production trading system.
+
+Historical results do not guarantee future performance.
+
+
+
+
