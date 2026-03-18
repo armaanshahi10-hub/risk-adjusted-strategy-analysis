@@ -48,6 +48,9 @@ This creates a portfolio that is always partially invested while actively reduci
 
 ## Project Structure
 
+## Project Structure
+
+```text
 risk-adjusted-strategy-analysis/
 ├── train_test.py
 ├── multi_asset_test.py
