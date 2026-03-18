@@ -48,8 +48,7 @@ This creates a portfolio that is always partially invested while actively reduci
 
 ## Project Structure
 
-## Project Structure
-
+'''
 risk-adjusted-strategy-analysis/
 ├── train_test.py
 ├── multi_asset_test.py
@@ -63,18 +62,18 @@ risk-adjusted-strategy-analysis/
 │   ├── metrics.py
 │   └── plots.py
 └── outputs/
-
+'''
 ---
 
 ## How to Run
-
+'''
 Install dependencies:
 
 bash
 pip install -r requirements.txt
 python train_test.py
 python multi_asset_test.py
-
+'''
 ---
 
 ## Headline Results (SPY)
