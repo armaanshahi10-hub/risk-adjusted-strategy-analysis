@@ -6,7 +6,6 @@ from src.signals import generate_signals
 from src.backtest import run_backtest
 from src.metrics import summarize_performance
 
-
 BASE_PARAMS = {
     "supertrend_len": 14,
     "supertrend_mult": 3,
@@ -32,23 +31,39 @@ TRAIN_END = "2018-12-31"
 TEST_START = "2019-01-01"
 TEST_END = "2024-12-31"
 
+WARMUP_DAYS = 550
 
-def run_one_period(ticker: str, start_date: str, end_date: str, params: dict) -> dict:
+
+def run_one_period(
+    ticker: str,
+    start: str,
+    end: str,
+    params: dict,
+    warmup_days: int = WARMUP_DAYS,
+) -> dict:
+    start_dt = pd.to_datetime(start)
+    warmup_start = (start_dt - pd.Timedelta(days=warmup_days)).strftime("%Y-%m-%d")
+
     local_params = params.copy()
     local_params["ticker"] = ticker
-    local_params["start_date"] = start_date
-    local_params["end_date"] = end_date
+    local_params["start_date"] = warmup_start
+    local_params["end_date"] = end
+    local_params["trade_start_date"] = start
 
-    df = get_clean_data(ticker, start_date, end_date)
-    df = add_indicators(df, local_params)
-    df = generate_signals(df, local_params)
-    bt = run_backtest(df, local_params)
+    raw = get_clean_data(ticker, local_params["start_date"], local_params["end_date"])
+    feat = add_indicators(raw, local_params)
+    sig = generate_signals(feat, local_params)
+
+    # Evaluate only the visible period, but after indicators/signals had warmup history
+    sig_eval = sig.loc[start:end].copy()
+
+    bt = run_backtest(sig_eval, local_params)
     stats = summarize_performance(bt)
 
     result = {
         "Ticker": ticker,
-        "Start": start_date,
-        "End": end_date,
+        "Start": start,
+        "End": end,
         "FinalValue_Strategy": stats.get("FinalValue_Strategy"),
         "FinalValue_BH": stats.get("FinalValue_BH"),
         "CAGR_Strategy": stats.get("CAGR_Strategy"),
@@ -62,25 +77,20 @@ def run_one_period(ticker: str, start_date: str, end_date: str, params: dict) ->
         "Sat_Entries": stats.get("Sat_Entries"),
         "Sat_Exits": stats.get("Sat_Exits"),
         "Sat_TimeInMarket": stats.get("Sat_TimeInMarket"),
+        "TotalTradeCosts_$": float(bt["CumTradeCost_$"].iloc[-1]) if "CumTradeCost_$" in bt.columns else 0.0,
     }
-
-    if "CumTradeCost_$" in bt.columns:
-        result["TotalTradeCosts_$"] = float(bt["CumTradeCost_$"].iloc[-1])
-    else:
-        result["TotalTradeCosts_$"] = 0.0
-
     return result
 
 
-def run_universe(period_name: str, start_date: str, end_date: str, tickers: list[str], params: dict) -> pd.DataFrame:
+def run_universe(period_name: str, start: str, end: str, tickers: list[str], params: dict) -> pd.DataFrame:
     results = []
 
     print(f"\n===== {period_name.upper()} MULTI-ASSET TEST =====")
-    print(f"Period: {start_date} → {end_date}\n")
+    print(f"Period: {start} → {end}\n")
 
     for ticker in tickers:
         try:
-            row = run_one_period(ticker, start_date, end_date, params)
+            row = run_one_period(ticker, start, end, params)
             results.append(row)
 
             print(f"{ticker}:")
