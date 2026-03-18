@@ -2,6 +2,8 @@
 
 A Python backtesting project that evaluates a rule-based, risk-managed trading strategy against buy-and-hold.
 
+This project focuses on balancing return and risk rather than maximizing raw performance, with an emphasis on drawdown control and risk-adjusted metrics.
+
 The strategy uses a **core-satellite portfolio structure**:
 
 - **Core (30%)** stays invested at all times  
@@ -71,8 +73,8 @@ Install dependencies:
 
 ```bash
 pip install -r requirements.txt
-python train_test.py
-python multi_asset_test.py
+python train_test.py # main evaluation
+python multi_asset_test.py # multi asset test
 ```
 ---
 
